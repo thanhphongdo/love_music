@@ -7,6 +7,7 @@
 <script lang="ts">
 import "jquery";
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { SongService } from "../services/song.service";
 
 interface User {
   firstName: string;
@@ -16,8 +17,14 @@ interface User {
 @Component
 export default class YourComponent extends Vue {
   message: string = "This is a message";
-
-  mounted() {}
+  songService: SongService;
+  constructor() {
+    super();
+    this.songService = new SongService();
+  }
+  mounted() {
+    this.songService.test();
+  }
 }
 </script>
 

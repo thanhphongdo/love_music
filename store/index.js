@@ -1,11 +1,11 @@
 import Vuex from 'vuex';
-import AxiosService from '../services/axios.service';
+// import AxiosService from '../services/axios.service';
 import LocalForageService from '../services/localforage.service';
 import * as courseModule from './modules/course';
 if (process.browser) {
   const localForage = new LocalForageService();
-  const axios = new AxiosService();
-  window.axios = axios;
+  // const axios = new AxiosService();
+  // window.axios = axios;
   window.localForage = localForage;
 }
 const createStore = () => {
