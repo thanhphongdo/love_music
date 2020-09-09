@@ -1,62 +1,53 @@
 <template>
-  <div>
-    <Nuxt />
+  <div class="tw-flex tw-flex-col tw-h-full">
+    <div v-show="isWaiting" class="ui segment app-loading">
+      <div class="ui active dimmer">
+        <div class="ui loader"></div>
+      </div>
+    </div>
+    <Toarst ref="mainToarst" class="tw-w-full" :msg="'ddd'"></Toarst>
+    <div class="tw-flex tw-flex-col tw-h-full tw-bg-white">
+      <AppActionBar></AppActionBar>
+      <div class="tw-flex-1 tw-p-4 tw-overflow-auto">
+        <nuxt />
+      </div>
+      <AppTabBar></AppTabBar>
+    </div>
   </div>
 </template>
-
-<style>
-html {
-  font-family:
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import Toarst from "~/components/controls/Toarst.vue";
+import ActionBar from "~/components/AppActionBar.vue";
+import Logo from "~/components/Logo.vue";
+import TabBar from "~/components/AppTabBar.vue";
+import { mapState, mapMutations } from "vuex";
+@Component({
+  computed: {
+    ...mapState(["isWaiting"]),
+  },
+  methods: mapMutations(["showWaiting", "hideWaiting"]),
+})
+export default class DefaultLayout extends Vue {
+  showWaiting: any;
+  hideWaiting: any;
+  mounted() {
+    (window as any).showWaiting = () => {
+      this.$store.commit("showWaiting");
+    };
+    (window as any).hideWaiting = () => {
+      this.$store.commit("hideWaiting");
+    };
+    (EventTarget.prototype as any)["addEventListenerBase"] =
+      EventTarget.prototype.addEventListener;
+    (EventTarget.prototype as any).addEventListener = function (
+      type: any,
+      listener: any
+    ) {
+      if (this !== document.querySelector("body") || type !== "touchmove") {
+        this.addEventListenerBase(type, listener);
+      }
+    };
+  }
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-</style>
+</script>
